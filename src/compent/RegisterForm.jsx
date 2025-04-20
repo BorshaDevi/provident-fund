@@ -12,6 +12,7 @@ import {
   } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import axios from "axios"
 
 
 const formSchema = z.object({
@@ -34,8 +35,13 @@ const RegisterForm=()=>{
             password:""
         }
     })
-    function onSubmit(data){
+    async function onSubmit (data){
         console.log(data)
+        await axios.post('/api/user',data).then((res)=>{
+            console.log(res.data.message , 'User created successfully')
+        }).catch((err)=>{
+            console.log(err.response.data.message , 'Error in creating user')
+        })
     }
     return(
         <div >
