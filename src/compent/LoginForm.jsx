@@ -12,20 +12,17 @@ import {
   } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-
+import axios from "axios"
+import { useRouter } from "next/navigation"
 
 const formSchema = z.object({
-    name: z.string().min(2 ,{
-        message:"Name must be at least 2 characters long"
-    }).max(50 ,{
-        message:"Name must be at most 50 characters long"
-    }),
     email:z.string().email(),
     password: z.string().min(8,{
         message:"Password must be at least 8 characters long"
     }).max(20),
   })
 const LoginForm=()=>{
+  const router=useRouter()
     const form=useForm({
             resolver: zodResolver(formSchema),
             defaultValues:{
@@ -33,8 +30,17 @@ const LoginForm=()=>{
                 password:""
             }
         })
-        function onSubmit(data){
+       async function onSubmit(data){
             console.log(data)
+            await axios.post('/api/loginUser',data)
+            .then(res =>{
+              console.log(res.data)
+              if(res.status===200){
+                  router.push('/')
+              }
+            }).catch(err =>{
+              console.log(err, 'Error in login')
+            })
         }
     return(
       <div >

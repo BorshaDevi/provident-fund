@@ -2,6 +2,7 @@ import connectDB from "@/DB/db";
 import User from "@/Modals/User";
 import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
+
 export async function POST(request){
     try{
         await connectDB()

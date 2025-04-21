@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import axios from "axios"
+import { useRouter } from "next/navigation"
 
 
 const formSchema = z.object({
@@ -27,6 +28,7 @@ const formSchema = z.object({
     }).max(20),
   })
 const RegisterForm=()=>{
+  const router=useRouter()
     const form=useForm({
         resolver: zodResolver(formSchema),
         defaultValues:{
@@ -38,9 +40,14 @@ const RegisterForm=()=>{
     async function onSubmit (data){
         console.log(data)
         await axios.post('/api/user',data).then((res)=>{
-            console.log(res.data.message , 'User created successfully')
+            console.log(res.data, 'user created successfully')
+            if(res.data.status===200){
+                  router.push('/login')
+            }
+
+            
         }).catch((err)=>{
-            console.log(err.response.data.message , 'Error in creating user')
+            console.log(err, 'Error in creating user')
         })
     }
     return(
